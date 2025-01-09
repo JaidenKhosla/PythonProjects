@@ -1,4 +1,4 @@
-import sys,math
+import sys,math, requests
 from PIL import Image
 
 def clampWithAdjustment(num,min, max):
@@ -8,13 +8,15 @@ def clampWithAdjustment(num,min, max):
     return num
 
 
-brightnessScale = " `.-\':_,^=;><+!rc*/z?sLTv)J7(|Fi\{C\}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
+brightnessScale = " `.-\':_,^=;><+!rc*/z?sLTv)J7(|Fi{{C}}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
 print(len(brightnessScale))
 imgPath = sys.argv[1]
-
-image = Image.open(imgPath).convert("RGB")
+initUrl = requests.get(imgPath).content
+with open("./baseImage.jpg", "wb") as file: file.write(initUrl)
+image = Image.open("./baseImage.jpg").convert("RGB")
 width, height = image.size
-image = image.resize((width//2, height//2))
+delimiter = int(sys.argv[2])
+image = image.resize((width//delimiter, height//delimiter))
 width, height = image.size
 
 with open("./output.txt","w") as file:
